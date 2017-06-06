@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>仿淘宝网放大镜特效</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<style>
+			*{margin: 0;padding: 0;}
+			#box
+			{
+				height: 498px;
+				width: 426px;
+				margin: 50px auto;
+				position: relative;
+			}
+			#box .big_pic
+			{
+				height: 426px;
+				width: 100%;
+			}
+			#box .big_pic img
+			{
+				height: 100%;
+				width: 100%;
+			}
+			#box .list
+			{
+				height: 74px;
+				width: 424px;
+				border: 1px solid #ccc;
+			}
+			#box .list ul li
+			{
+				list-style: none;
+				float: left;
+				margin: 10px;
+				height: 50px;
+				width: 50px;
+			}
+			#box .list ul li img
+			{
+				height: 100%;
+				width: 100%;
+			}
+			#box .main
+			{
+				height: 426px;
+				width: 426px;
+				overflow: hidden;
+				position: absolute;
+				left: 446px;
+				top: 0;
+				display: none;
+			}
+			#box .main img
+			{
+				position: absolute;
+				height: 852px;
+				width: 852px;
+				top: -200px;
+				left: -200px;
+			}
+			#box .small
+			{
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 180px;
+				width: 180px;
+				cursor: move;
+				background: url(img/move.png);
+				display: none;
+			}
+			#box .list .active
+			{
+				border: 2px yellow solid;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<div class="big_pic">
+				<img src="img/big1.jpg"/>
+				<div class="small"></div>
+			</div>
+			<div class="list">
+				<ul>
+					<li class="active" datasrc="img/big1.jpg"><img src="img/1.jpg"></li>
+					<li datasrc="img/big2.jpg"><img src="img/2.jpg"></li><!--html5自定义属性-->
+					<li datasrc="img/big3.jpg"><img src="img/3.jpg"></li>
+					<li datasrc="img/big4.jpg"><img src="img/4.jpg"></li>
+					<li datasrc="img/big5.jpg"><img src="img/5.jpg"></li>
+					<li datasrc="img/big6.jpg"><img src="img/6.jpg"></li>
+				</ul>
+			</div>
+			<div class="main">
+			<img src="img/big1.jpg"/>
+		    </div>
+		</div>
+		<script src="js/jquery.min.js"></script>
+		<script>
+	    $('#box .list ul li').hover(function(){
+	    	$(this).addClass('active').siblings().removeClass('active');
+	    	var img=$(this).attr('dataSrc');
+	    	$('#box .big_pic img').attr('src',img);
+	    	$('#box .main img').attr('src',img);
+	    })
+	    $('#box .big_pic').hover(function(){
+	    	$('#box .main').show();
+	    	$('#box .small').show();
+	    	$('#box .big_pic').mousemove(function(ev){
+	    		var x=ev.clientX;
+	    		var y=ev.clientY;
+	    		var b_left=$('#box .big_pic').offset().left;
+	    		var b_top=$('#box .big_pic').offset().top;
+	    		
+	    		var s_left=x-b_left-$('#box .small').width()/2;
+	    		var s_top=y-b_top-$('#box .small').height()/2;
+	    		
+	    		var bi=($('#box .main img').width()-$('#box .main').width())/($('#box .big_pic img').width()-$('#box .small').width())
+	    		if(s_left<0)
+	    		{
+	    			s_left=0;
+	    		}
+	    		else 
+	    		if(s_left>($('#box .big_pic img').width()-$('#box .small').width()))
+	    		{
+	    			s_left=($('#box .big_pic img').width()-$('#box .small').width());
+	    		}
+	    		
+	    		if(s_top<0)
+	    		{
+	    			s_top=0;
+	    		}
+	    		else
+	    		if(s_top>(($('#box .big_pic img').height()-$('#box .small').height())))
+	    		{
+	    			s_top=($('#box .big_pic img').height()-$('#box .small').height())
+	    		}
+	    		$('#box .small').css({left:s_left,top:s_top})
+	    		$('#box .main img').css({left:-s_left*bi,top:-s_top*bi})
+	    	});
+	    },function(){
+	    	$('#box .main').hide();
+	    	$('#box .small').hide();
+	    });
+		</script>
+	</body>
+</html>
